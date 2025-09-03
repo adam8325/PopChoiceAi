@@ -2,6 +2,8 @@
 
 PopChoiceAI is an AI-powered movie recommendation app built with React, Tailwind CSS, Supabase, OpenAI, and Cloudflare Workers. It leverages modern AI techniques such as vector search and Retrieval-Augmented Generation (RAG) to deliver personalized movie suggestions based on user input.
 
+Have a try here: https://popchoiceai.netlify.app/
+
 ## Technologies Used
 - **React**: Frontend framework for building interactive UIs.
 - **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
