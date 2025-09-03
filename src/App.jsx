@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import popImage from './assets/pop.png';
-import { openai, supabase } from './Config';
-import movies from './Content';
+
 
 function App() {
 
