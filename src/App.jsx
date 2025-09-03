@@ -12,47 +12,36 @@ function App() {
   const [matchedMovie, setMatchedMovie] = useState(null);
 
   async function handleClick() {
+  if (!matchedMovie) {
+    setLoadingResponse(true);
 
-    if(!loadingResponse) {
+    const userQuery = `${input1} ${input2} ${input3}`;
 
-       setLoadingResponse(true);
-
-        const userQuery = `${input1} ${input2} ${input3}`;
-
-        // Step 1: Create embedding from user input
-        const embeddingResponse = await openai.embeddings.create({
-          model: "text-embedding-ada-002",
-          input: userQuery
-        });
-
-        const userEmbedding = embeddingResponse.data[0].embedding;
-
-        // Step 2: Query Supabase for similar movies
-        const { data, error } = await supabase.rpc("match_movies", {
-          query_embedding: userEmbedding,
-          match_threshold: 0.75,
-          match_count: 1
-        });
-
-        if (error) {
-          console.error("Error fetching match:", error.message);
-          setLoadingResponse(false);
-          return;
+    try {
+      const response = await fetch(
+        "https://popchoiceai-worker.openai-api-worker-eleraky.workers.dev",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: userQuery })
         }
+      );
 
-        setMatchedMovie(data[0]); // Best match
-
-    }
-    else {
-       setLoadingResponse(false);
-      setInput1('');
-      setInput2('');
-      setInput3('');
-      setMatchedMovie(null); 
+      const data = await response.json();
+      setMatchedMovie(data[0] || null);
+    } catch (err) {
+      console.error("Error fetching match:", err);
     }
 
-   
+    setLoadingResponse(false);
+  } else {
+    setLoadingResponse(false);
+    setInput1('');
+    setInput2('');
+    setInput3('');
+    setMatchedMovie(null);
   }
+}
 
   return (
     <div className='w-screen h-screen flex '>
